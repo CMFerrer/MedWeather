@@ -1,7 +1,7 @@
-package com.chiksmedina.medweather.main.data
+package com.chiksmedina.medweather.weather.data
 
-import com.chiksmedina.medweather.main.data.network.WeatherApi
-import com.chiksmedina.medweather.main.data.network.models.NetworkWeather
+import com.chiksmedina.medweather.weather.data.network.WeatherApi
+import com.chiksmedina.medweather.weather.data.network.models.NetworkWeather
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(

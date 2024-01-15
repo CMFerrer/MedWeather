@@ -1,7 +1,7 @@
 package com.chiksmedina.medweather.core.di
 
-import com.chiksmedina.medweather.main.data.WeatherRepository
-import com.chiksmedina.medweather.main.data.WeatherRepositoryImpl
+import com.chiksmedina.medweather.weather.data.WeatherRepository
+import com.chiksmedina.medweather.weather.data.WeatherRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

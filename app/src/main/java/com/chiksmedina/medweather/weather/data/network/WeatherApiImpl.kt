@@ -1,8 +1,8 @@
-package com.chiksmedina.medweather.main.data.network
+package com.chiksmedina.medweather.weather.data.network
 
 import android.util.Log
 import com.chiksmedina.medweather.core.util.HttpRoutes
-import com.chiksmedina.medweather.main.data.network.models.NetworkWeather
+import com.chiksmedina.medweather.weather.data.network.models.NetworkWeather
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

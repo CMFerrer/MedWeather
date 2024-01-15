@@ -2,8 +2,8 @@ package com.chiksmedina.medweather.core.di
 
 import android.util.Log
 import com.chiksmedina.medweather.core.util.HttpRoutes
-import com.chiksmedina.medweather.main.data.network.WeatherApi
-import com.chiksmedina.medweather.main.data.network.WeatherApiImpl
+import com.chiksmedina.medweather.weather.data.network.WeatherApi
+import com.chiksmedina.medweather.weather.data.network.WeatherApiImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

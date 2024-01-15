@@ -1,11 +1,11 @@
-package com.chiksmedina.medweather.main.ui
+package com.chiksmedina.medweather.weather.ui
 
-import com.chiksmedina.medweather.main.data.network.models.NetworkWeather
+import com.chiksmedina.medweather.weather.data.network.models.NetworkWeather
 
 sealed interface WeatherUiState {
     data object Loading : WeatherUiState
 
-    data class Details(
+    data class Success(
         val forecast: NetworkWeather? = null,
         val latitude: Double = -12.0432, // Lima default
         val longitude: Double = -77.0282,
@@ -15,5 +15,4 @@ sealed interface WeatherUiState {
         val isReceptionEnabled: Boolean = false, // button to go ReceptionScreen
     ) : WeatherUiState
 
-    data object Success : WeatherUiState
 }

@@ -1,42 +1,38 @@
 package com.chiksmedina.medweather
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
-import android.location.Location
-import android.location.LocationManager
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.chiksmedina.medweather.main.ui.WeatherScreen
-import com.chiksmedina.medweather.main.ui.WeatherViewModel
+import com.chiksmedina.medweather.navigation.NavGraph
+import com.chiksmedina.medweather.weather.ui.WeatherScreen
+import com.chiksmedina.medweather.weather.ui.WeatherViewModel
+import com.chiksmedina.solar.OutlineSolar
+import com.chiksmedina.solar.outline.Arrows
+import com.chiksmedina.solar.outline.arrows.AltArrowLeft
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun AppScreen() {
+fun AppScreen(
+    appState: AppState = rememberAppState()
+) {
 
     /*val locationPermissionsState = rememberMultiplePermissionsState(
         listOf(
@@ -53,11 +49,14 @@ fun AppScreen() {
         locationPermissionsState
     )*/
 
-    val weatherViewModel = hiltViewModel<WeatherViewModel>()
-    val uiState by weatherViewModel.uiState.collectAsStateWithLifecycle()
+    Scaffold { paddingValues ->
 
-    WeatherScreen()
+        NavGraph(
+            appState = appState,
+            paddingValues = paddingValues,
+        )
 
+    }
 }
 
 @SuppressLint("MissingPermission")

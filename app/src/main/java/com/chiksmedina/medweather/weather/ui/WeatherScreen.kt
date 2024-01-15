@@ -1,6 +1,7 @@
-package com.chiksmedina.medweather.main.ui
+package com.chiksmedina.medweather.weather.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,13 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun WeatherScreen() {
+fun WeatherScreen(uiState: WeatherUiState.Success, paddingValues: PaddingValues) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
+        uiState.forecast
         WeatherHeader("23°C", "15°C", "30°C")
         // Add other weather components here
 

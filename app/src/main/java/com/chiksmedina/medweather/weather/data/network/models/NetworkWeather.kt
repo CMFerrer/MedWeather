@@ -1,4 +1,4 @@
-package com.chiksmedina.medweather.main.data.network.models
+package com.chiksmedina.medweather.weather.data.network.models
 import kotlinx.serialization.Serializable
 
 import kotlinx.serialization.SerialName
