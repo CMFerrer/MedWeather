@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,15 +40,18 @@ import com.chiksmedina.solar.outline.search.MinimalisticMagnifer
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @Composable
-fun SearchWrapper(
-    onBackPress: () -> Unit,
+fun SearchScreen(
+    uiState: SearchUiState.Success,
+    scope: CoroutineScope,
     search: (String) -> Unit,
-    content:  @Composable () -> Unit,
+    saveCityAndLocation: (String, Double, Double) -> Unit,
+    onBackPress: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -57,19 +59,8 @@ fun SearchWrapper(
         horizontalAlignment =  Alignment.CenterHorizontally
     ) {
         SearchTopBar(onBackPress, search)
-        content()
-    }
-}
 
-@Composable
-fun SearchScreen(
-    uiState: SearchUiState.Success,
-    search: (String) -> Unit,
-    saveCityAndLocation: (String, Double, Double) -> Unit,
-    onBackPress: () -> Unit,
-) {
-
-    SearchWrapper(onBackPress = onBackPress, search = search) {
+        ButtonRequestLocationPermission(scope = scope, saveCityAndLocation = saveCityAndLocation)
         uiState.cities?.results?.let {
             for (city in it) {
                 ListItem(
@@ -80,14 +71,15 @@ fun SearchScreen(
             }
         }
     }
-
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("MissingPermission")
 @Composable
-fun NewSearch(search: (String) -> Unit, saveCityAndLocation: (String, Double, Double) -> Unit, onBackPress: () -> Unit) {
-    val scope = rememberCoroutineScope()
+fun ButtonRequestLocationPermission(
+    scope: CoroutineScope,
+    saveCityAndLocation: (String, Double, Double) -> Unit
+) {
     val context = LocalContext.current
     val locationClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
@@ -102,36 +94,34 @@ fun NewSearch(search: (String) -> Unit, saveCityAndLocation: (String, Double, Do
         )
     )
 
-    SearchWrapper(onBackPress = onBackPress, search = search) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Button(
-                onClick = {
-                    if (locationPermissionsState.allPermissionsGranted) {
-                        scope.launch(Dispatchers.IO) {
-                            val result = locationClient.lastLocation.await()
-                            locationInfo = if (result == null) {
-                                "No last known location. Try fetching the current location first"
-                            } else {
-                                "Current location is \n" + "lat : ${result.latitude}\n" +
-                                        "long : ${result.longitude}\n" + "fetched at ${System.currentTimeMillis()}"
-                            }
-                            Log.d("Location", locationInfo)
-                            if (result!= null) saveCityAndLocation("Ubicación Actual", result.latitude, result.longitude)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Button(
+            onClick = {
+                if (locationPermissionsState.allPermissionsGranted) {
+                    scope.launch(Dispatchers.IO) {
+                        val result = locationClient.lastLocation.await()
+                        locationInfo = if (result == null) {
+                            "No last known location. Try fetching the current location first"
+                        } else {
+                            "Current location is \n" + "lat : ${result.latitude}\n" +
+                                    "long : ${result.longitude}\n" + "fetched at ${System.currentTimeMillis()}"
                         }
-                    } else {
-                        locationPermissionsState.launchMultiplePermissionRequest()
+                        Log.d("Location", locationInfo)
+                        if (result!= null) saveCityAndLocation("Ubicación Actual", result.latitude, result.longitude)
                     }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium
-            ) {
-                Text(text = "Usar ubicación actual")
-            }
+                } else {
+                    locationPermissionsState.launchMultiplePermissionRequest()
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Text(text = "Usar ubicación actual")
         }
     }
 }

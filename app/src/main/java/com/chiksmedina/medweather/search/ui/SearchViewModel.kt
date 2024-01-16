@@ -18,7 +18,7 @@ class SearchViewModel @Inject constructor(
     private val data: DataStoreRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.New)
+    private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Success())
     val uiState = _uiState.asStateFlow()
 
     fun search(city: String) {

@@ -12,7 +12,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.chiksmedina.medweather.AppState
 import com.chiksmedina.medweather.navigation.Routes
-import com.chiksmedina.medweather.search.ui.NewSearch
+import com.chiksmedina.medweather.search.ui.ButtonRequestLocationPermission
 import com.chiksmedina.medweather.search.ui.SearchScreen
 import com.chiksmedina.medweather.search.ui.SearchUiState
 import com.chiksmedina.medweather.search.ui.SearchViewModel
@@ -56,18 +56,10 @@ fun NavGraphBuilder.searchScreen(
         val uiState by searchViewModel.uiState.collectAsStateWithLifecycle()
 
         when (uiState) {
-            SearchUiState.New -> NewSearch(
-                search = searchViewModel::search,
-                saveCityAndLocation = { cit, lat, lon ->
-                    searchViewModel.saveCityAndLocation(cit, lat, lon) {
-                        appState.navigateToTopLevelDestination(Routes.Weather)
-                    }
-                },
-                onBackPress = { appState.navController.popBackStack() }
-            )
             SearchUiState.Loading -> LoadingUI()
             is SearchUiState.Success -> SearchScreen(
                 uiState = uiState as SearchUiState.Success,
+                scope = appState.coroutineScope,
                 search = searchViewModel::search,
                 saveCityAndLocation = { cit, lat, lon ->
                     searchViewModel.saveCityAndLocation(cit, lat, lon) {
