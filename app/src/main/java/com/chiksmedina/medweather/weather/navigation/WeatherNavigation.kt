@@ -3,6 +3,7 @@ package com.chiksmedina.medweather.weather.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -22,6 +23,7 @@ fun NavController.navigateToWeather(navOptions: NavOptions? = null) {
     this.navigate(Routes.Weather.route, navOptions)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.weatherScreen(
     appState: AppState,
     paddingValues: PaddingValues
@@ -61,7 +63,9 @@ fun NavGraphBuilder.weatherScreen(
             is WeatherUiState.Success -> WeatherScreen(
                 paddingValues = paddingValues,
                 uiState = uiState as WeatherUiState.Success,
-                toSearch = { appState.navigateToTopLevelDestination(Routes.Search) }
+                pullRefreshState = appState.pullRefreshState,
+                toSearch = { appState.navigateToTopLevelDestination(Routes.Search) },
+                refresh = { weatherViewModel.refresh { appState.pullRefreshState.endRefresh() } }
             )
 
             is WeatherUiState.Error -> NoInternetConnection((uiState as WeatherUiState.Error).message) {

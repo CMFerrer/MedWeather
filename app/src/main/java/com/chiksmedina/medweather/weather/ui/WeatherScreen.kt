@@ -17,14 +17,25 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -51,44 +62,61 @@ import com.chiksmedina.solar.outline.weather.Waterdrops
 import com.chiksmedina.solar.outline.weather.Wind
 import java.time.LocalDateTime
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherScreen(
     paddingValues: PaddingValues,
     uiState: WeatherUiState.Success,
-    toSearch: () -> Unit
+    pullRefreshState: PullToRefreshState,
+    toSearch: () -> Unit,
+    refresh: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .padding(24.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
 
-        uiState.forecast?.let {
-            City(city = uiState.city, toSearch = toSearch)
-            WeatherHeader(
-                "${it.current.temperature2m} ${it.currentUnits.temperature2m}",
-                "${it.daily.temperature2mMax[0]} ${it.dailyUnits.temperature2mMax[0]}",
-                "${it.daily.temperature2mMin[0]} ${it.dailyUnits.temperature2mMin[0]}",
-                it.current.weatherCode.weatherInterpretationCode()
-            )
+    if (pullRefreshState.isRefreshing) {
+        refresh()
+    }
 
-            Spacer(modifier = Modifier.height(24.dp))
+    Box(Modifier.nestedScroll(pullRefreshState.nestedScrollConnection)) {
 
-            HourlyWeather(it.hourlyUnits, it.hourly)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(24.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
 
-            NextFiveDays(it.dailyUnits, it.daily)
+            uiState.forecast?.let {
+                City(city = uiState.city, toSearch = toSearch)
+                WeatherHeader(
+                    actualTemperature = "${it.current.temperature2m} ${it.currentUnits.temperature2m}",
+                    maxTemperature = "${it.daily.temperature2mMax[0]} ${it.dailyUnits.temperature2mMax[0]}",
+                    minTemperature = "${it.daily.temperature2mMin[0]} ${it.dailyUnits.temperature2mMin[0]}",
+                    weatherInterpretation =  it.current.weatherCode.weatherInterpretationCode(),
+                    lastUpdate = it.current.time.replace("T", " ")
+                )
 
-            UsefulInformation(it.currentUnits, it.current)
+                Spacer(modifier = Modifier.height(24.dp))
 
-            SunriseAndSunset(it.daily.sunrise[0].split("T")[1], it.daily.sunset[0].split("T")[1])
+                HourlyWeather(it.hourlyUnits, it.hourly)
+
+                NextFiveDays(it.dailyUnits, it.daily)
+
+                UsefulInformation(it.currentUnits, it.current)
+
+                SunriseAndSunset(it.daily.sunrise[0].split("T")[1], it.daily.sunset[0].split("T")[1])
+
+            }
 
         }
-
+        PullToRefreshContainer(
+            modifier = Modifier.align(Alignment.TopCenter),
+            state = pullRefreshState,
+        )
     }
+
 }
 
 @Composable
@@ -107,7 +135,8 @@ fun WeatherHeader(
     actualTemperature: String,
     maxTemperature: String,
     minTemperature: String,
-    weatherInterpretation: String
+    weatherInterpretation: String,
+    lastUpdate: String
 ) {
     Text(
         text = actualTemperature,
@@ -132,7 +161,15 @@ fun WeatherHeader(
     }
 
     Text(text = weatherInterpretation)
+    LastUpdate(lastUpdate = lastUpdate)
+}
 
+@Composable
+fun LastUpdate(lastUpdate: String) {
+    Column {
+        Text(text = "Ultima actualización:", fontStyle = FontStyle.Italic, color = Color.Gray, style = MaterialTheme.typography.labelSmall)
+        Text(text = lastUpdate, color = Color.DarkGray, style = MaterialTheme.typography.labelMedium)
+    }
 }
 
 @Composable

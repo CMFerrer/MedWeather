@@ -1,5 +1,8 @@
 package com.chiksmedina.medweather
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
@@ -16,10 +19,12 @@ import com.chiksmedina.medweather.search.navigation.navigateToSearch
 import com.chiksmedina.medweather.weather.navigation.navigateToWeather
 import kotlinx.coroutines.CoroutineScope
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun rememberAppState(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
+    pullToRefreshState: PullToRefreshState = rememberPullToRefreshState(),
 ): AppState {
     return remember(
         navController,
@@ -28,14 +33,16 @@ fun rememberAppState(
         AppState(
             navController,
             coroutineScope,
+            pullToRefreshState
         )
     }
 }
 
 @Stable
-class AppState(
+class AppState @OptIn(ExperimentalMaterial3Api::class) constructor(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
+    val pullRefreshState: PullToRefreshState
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController

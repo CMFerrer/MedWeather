@@ -46,4 +46,22 @@ class WeatherViewModel @Inject constructor(
 
         }
     }
+
+    fun refresh(endRefreshIndicator: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            combine(data.city, data.latitude, data.longitude, ::Triple)
+                .collect { (cit, lat, lon) ->
+                    repository.getWeather(lat, lon)
+                        .onSuccess { weather ->
+                            _uiState.update { WeatherUiState.Success(forecast = weather, city = cit) }
+                        }
+                        .onFailure { error ->
+                            _uiState.update { WeatherUiState.Error(message = error.message ?: "Error App") }
+                        }
+                    endRefreshIndicator()
+                }
+
+        }
+    }
 }
