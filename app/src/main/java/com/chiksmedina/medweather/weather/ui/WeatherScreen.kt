@@ -1,5 +1,6 @@
 package com.chiksmedina.medweather.weather.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -71,7 +73,7 @@ fun WeatherScreen(
         refresh()
     }
 
-    Box(Modifier.nestedScroll(pullRefreshState.nestedScrollConnection)) {
+    Box(Modifier.background(Brush.linearGradient(listOf(Color(0xFF3e61db), Color(0xFF649fe8)))).nestedScroll(pullRefreshState.nestedScrollConnection)) {
 
         Column(
             modifier = Modifier
@@ -119,6 +121,7 @@ fun City(city: String, toSearch: () -> Unit) {
         Text(
             text = city,
             modifier = Modifier.padding(horizontal = 18.dp),
+            color = Color.White,
             style = MaterialTheme.typography.titleLarge
         )
     }
@@ -135,34 +138,34 @@ fun WeatherHeader(
     Text(
         text = actualTemperature,
         style = MaterialTheme.typography.displayLarge,
-        color = MaterialTheme.colorScheme.onBackground,
+        color = Color.White,
         modifier = Modifier.padding(top = 16.dp)
     )
     Row {
         Text(
             text = maxTemperature,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = Color.White,
             modifier = Modifier.padding(top = 4.dp)
         )
-        Text(text = " / ")
+        Text(text = " / ", color = Color.White)
         Text(
             text = minTemperature,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = Color.White,
             modifier = Modifier.padding(top = 4.dp)
         )
     }
 
-    Text(text = weatherInterpretation)
+    Text(text = weatherInterpretation, color = Color.White)
     LastUpdate(lastUpdate = lastUpdate)
 }
 
 @Composable
 fun LastUpdate(lastUpdate: String) {
     Column {
-        Text(text = "Ultima actualización:", fontStyle = FontStyle.Italic, color = Color.Gray, style = MaterialTheme.typography.labelSmall)
-        Text(text = lastUpdate, color = Color.DarkGray, style = MaterialTheme.typography.labelMedium)
+        Text(text = "Ultima actualización", fontStyle = FontStyle.Italic, color = Color.LightGray, style = MaterialTheme.typography.labelSmall)
+        Text(text = lastUpdate, color = Color.White, style = MaterialTheme.typography.labelMedium)
     }
 }
 
