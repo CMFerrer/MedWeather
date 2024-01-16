@@ -2,6 +2,8 @@ package com.chiksmedina.medweather.core.di
 
 import android.util.Log
 import com.chiksmedina.medweather.core.util.HttpRoutes
+import com.chiksmedina.medweather.search.data.network.SearchApi
+import com.chiksmedina.medweather.search.data.network.SearchApiImpl
 import com.chiksmedina.medweather.weather.data.network.WeatherApi
 import com.chiksmedina.medweather.weather.data.network.WeatherApiImpl
 import dagger.Module
@@ -61,5 +63,11 @@ class NetworkModule {
     @Singleton
     fun provideWeatherApi(httpClient: HttpClient): WeatherApi {
         return WeatherApiImpl(httpClient)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchApi(httpClient: HttpClient): SearchApi {
+        return SearchApiImpl(httpClient)
     }
 }
