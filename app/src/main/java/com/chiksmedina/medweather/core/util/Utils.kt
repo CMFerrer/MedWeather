@@ -5,7 +5,6 @@ import java.time.LocalDateTime
 import java.time.Month
 import java.time.format.TextStyle
 import java.util.Locale
-import kotlin.math.roundToInt
 
 fun Int.weatherInterpretationCode(): String = when (this) {
     0 -> "Cielo despejado"

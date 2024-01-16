@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.chiksmedina.medweather.navigation.Routes
+import com.chiksmedina.medweather.search.navigation.navigateToSearch
 import com.chiksmedina.medweather.weather.navigation.navigateToWeather
 import kotlinx.coroutines.CoroutineScope
 
@@ -76,7 +77,7 @@ class AppState(
 
             when (topLevelDestination) {
                 Routes.Weather -> navController.navigateToWeather(topLevelNavOptions)
-                Routes.Search -> TODO()
+                Routes.Search -> navController.navigateToSearch(topLevelNavOptions)
             }
         }
     }

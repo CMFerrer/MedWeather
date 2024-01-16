@@ -1,7 +1,7 @@
 package com.chiksmedina.medweather.weather.data.network.models
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class NetworkWeather(
