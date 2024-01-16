@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import com.chiksmedina.medweather.AppState
 import com.chiksmedina.medweather.navigation.Routes
 import com.chiksmedina.medweather.weather.ui.LoadingUI
+import com.chiksmedina.medweather.weather.ui.NoInternetConnection
 import com.chiksmedina.medweather.weather.ui.WeatherScreen
 import com.chiksmedina.medweather.weather.ui.WeatherUiState
 import com.chiksmedina.medweather.weather.ui.WeatherViewModel
@@ -56,11 +57,16 @@ fun NavGraphBuilder.weatherScreen(
 
         when (uiState) {
             WeatherUiState.Loading -> LoadingUI()
+
             is WeatherUiState.Success -> WeatherScreen(
                 paddingValues = paddingValues,
                 uiState = uiState as WeatherUiState.Success,
                 toSearch = { appState.navigateToTopLevelDestination(Routes.Search) }
             )
+
+            is WeatherUiState.Error -> NoInternetConnection((uiState as WeatherUiState.Error).message) {
+                weatherViewModel.getWeather()
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import com.chiksmedina.medweather.weather.data.network.models.NetworkWeather
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import java.net.UnknownHostException
 
 class WeatherApiImpl(
     private val client: HttpClient
@@ -19,6 +20,8 @@ class WeatherApiImpl(
                 }
             }.body()
             Result.success(response)
+        } catch (e: UnknownHostException) {
+            Result.failure(Exception("\uD83E\uDD21 No hay conexión a internet"))
         } catch(e: Exception) {
             Log.d(TAG, "Error: general ${e.message}")
             Result.failure(Exception("Error al consultar el clima"))

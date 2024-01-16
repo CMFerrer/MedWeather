@@ -1,5 +1,6 @@
 package com.chiksmedina.medweather.weather.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chiksmedina.medweather.weather.data.DataStoreRepository
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,7 +29,7 @@ class WeatherViewModel @Inject constructor(
         getWeather()
     }
 
-    private fun getWeather() {
+    fun getWeather() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update { WeatherUiState.Loading }
 
@@ -36,6 +38,9 @@ class WeatherViewModel @Inject constructor(
                     repository.getWeather(lat, lon)
                         .onSuccess { weather ->
                             _uiState.update { WeatherUiState.Success(forecast = weather, city = cit) }
+                        }
+                        .onFailure { error ->
+                            _uiState.update { WeatherUiState.Error(message = error.message ?: "Error App") }
                         }
                 }
 

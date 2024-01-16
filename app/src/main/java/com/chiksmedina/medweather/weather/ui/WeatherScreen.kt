@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.chiksmedina.medweather.core.util.getDayOfWeek
 import com.chiksmedina.medweather.core.util.getHour
@@ -66,7 +68,7 @@ fun WeatherScreen(
     ) {
 
         uiState.forecast?.let {
-            City(city = uiState.city, toSearch= toSearch)
+            City(city = uiState.city, toSearch = toSearch)
             WeatherHeader(
                 "${it.current.temperature2m} ${it.currentUnits.temperature2m}",
                 "${it.daily.temperature2mMax[0]} ${it.dailyUnits.temperature2mMax[0]}",
@@ -92,7 +94,11 @@ fun WeatherScreen(
 @Composable
 fun City(city: String, toSearch: () -> Unit) {
     TextButton(onClick = { toSearch() }) {
-        Text(text = city, modifier = Modifier.padding(horizontal = 18.dp), style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = city,
+            modifier = Modifier.padding(horizontal = 18.dp),
+            style = MaterialTheme.typography.titleLarge
+        )
     }
 }
 
@@ -136,12 +142,23 @@ fun HourlyWeather(hourlyUnits: HourlyUnits, hourly: Hourly) {
     val currentHour = hourly.time.find { it.startsWith(dateTime.toString().substring(0, 13)) }
 
     // New list with the next 24 hours, starting from the current hour
-    val timeList = hourly.time.subList(hourly.time.indexOf(currentHour), hourly.time.indexOf(currentHour)+ 25)
-    val temperatureList = hourly.temperature2m.subList(hourly.time.indexOf(currentHour), hourly.time.indexOf(currentHour)+ 25)
-    val iconList = hourly.weatherCode.subList(hourly.time.indexOf(currentHour), hourly.time.indexOf(currentHour)+ 25)
+    val timeList =
+        hourly.time.subList(hourly.time.indexOf(currentHour), hourly.time.indexOf(currentHour) + 25)
+    val temperatureList = hourly.temperature2m.subList(
+        hourly.time.indexOf(currentHour),
+        hourly.time.indexOf(currentHour) + 25
+    )
+    val iconList = hourly.weatherCode.subList(
+        hourly.time.indexOf(currentHour),
+        hourly.time.indexOf(currentHour) + 25
+    )
 
     Card {
-        Text(text = "Por horas", modifier = Modifier.padding(start = 4.dp, top = 8.dp), style = MaterialTheme.typography.labelMedium)
+        Text(
+            text = "Por horas",
+            modifier = Modifier.padding(start = 4.dp, top = 8.dp),
+            style = MaterialTheme.typography.labelMedium
+        )
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -165,7 +182,11 @@ fun HourlyWeatherCard(hour: String, temperature: String, icon: ImageVector) {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(text = hour, style = MaterialTheme.typography.labelMedium)
-        Icon(imageVector = icon, contentDescription = "weather icon", tint = MaterialTheme.colorScheme.primary)
+        Icon(
+            imageVector = icon,
+            contentDescription = "weather icon",
+            tint = MaterialTheme.colorScheme.primary
+        )
         Text(text = temperature, fontWeight = FontWeight.SemiBold)
     }
 }
@@ -173,7 +194,11 @@ fun HourlyWeatherCard(hour: String, temperature: String, icon: ImageVector) {
 @Composable
 fun NextFiveDays(dailyUnits: DailyUnits, daily: Daily) {
     ElevatedCard(modifier = Modifier.fillMaxWidth()) {
-        Text(text = "Próximos 5 dias", modifier = Modifier.padding(start = 4.dp, top = 8.dp), style = MaterialTheme.typography.labelMedium)
+        Text(
+            text = "Próximos 5 dias",
+            modifier = Modifier.padding(start = 4.dp, top = 8.dp),
+            style = MaterialTheme.typography.labelMedium
+        )
 
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -198,7 +223,11 @@ fun NextFiveDaysCard(dayOfWeek: String, maxTemp: String, minTemp: String, icon: 
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = dayOfWeek, style = MaterialTheme.typography.titleMedium)
-        Icon(imageVector = icon, contentDescription = "weather icon", tint = MaterialTheme.colorScheme.primary)
+        Icon(
+            imageVector = icon,
+            contentDescription = "weather icon",
+            tint = MaterialTheme.colorScheme.primary
+        )
         Row {
             Text(text = maxTemp, style = MaterialTheme.typography.titleSmall)
             Text(text = " / ")
@@ -214,7 +243,11 @@ fun UsefulInformation(currentUnits: CurrentUnits, current: Current) {
         .padding(vertical = 8.dp)
     Card(modifier = Modifier.fillMaxWidth()) {
 
-        Text(text = "Información útil", modifier = Modifier.padding(start = 4.dp, top = 8.dp), style = MaterialTheme.typography.labelMedium)
+        Text(
+            text = "Información útil",
+            modifier = Modifier.padding(start = 4.dp, top = 8.dp),
+            style = MaterialTheme.typography.labelMedium
+        )
 
         Row(modifier = modifierRow) {
             UsefulInformationCard(
@@ -263,7 +296,12 @@ fun UsefulInformation(currentUnits: CurrentUnits, current: Current) {
 }
 
 @Composable
-fun UsefulInformationCard(modifier: Modifier = Modifier, icon: ImageVector, text: String, subText: String) {
+fun UsefulInformationCard(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    text: String,
+    subText: String
+) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -295,14 +333,24 @@ fun SunriseAndSunset(sunrise: String, sunset: String) {
     ) {
 
         ElevatedCard(modifier = Modifier.weight(1f)) {
-            UsefulInformationCard(modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 8.dp), icon = OutlineSolar.Weather.Sunrise, text = sunrise, subText = "Amanecer")
+            UsefulInformationCard(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = 8.dp),
+                icon = OutlineSolar.Weather.Sunrise,
+                text = sunrise,
+                subText = "Amanecer"
+            )
         }
         ElevatedCard(modifier = Modifier.weight(1f)) {
-            UsefulInformationCard(modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 8.dp), icon = OutlineSolar.Weather.Sunset, text = sunset, subText = "Atardecer")
+            UsefulInformationCard(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = 8.dp),
+                icon = OutlineSolar.Weather.Sunset,
+                text = sunset,
+                subText = "Atardecer"
+            )
         }
     }
 }
@@ -311,5 +359,30 @@ fun SunriseAndSunset(sunrise: String, sunset: String) {
 fun LoadingUI() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun NoInternetConnection(message: String, refresh: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = message,
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center
+            )
+            Button(onClick = { refresh() }, shape = MaterialTheme.shapes.medium) {
+                Text(text = "Reintentar")
+            }
+        }
+
     }
 }

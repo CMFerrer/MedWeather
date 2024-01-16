@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chiksmedina.medweather.search.data.SearchRepository
 import com.chiksmedina.medweather.weather.data.DataStoreRepository
+import com.chiksmedina.medweather.weather.ui.WeatherUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,10 +25,13 @@ class SearchViewModel @Inject constructor(
     fun search(city: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update { SearchUiState.Loading }
-            repository.search(city).
-                    onSuccess {  result ->
+            repository.search(city)
+                .onSuccess {  result ->
                         _uiState.update { SearchUiState.Success(result) }
                     }
+                .onFailure { error ->
+                    _uiState.update { SearchUiState.Error(message = error.message ?: "Error App") }
+                }
         }
     }
 

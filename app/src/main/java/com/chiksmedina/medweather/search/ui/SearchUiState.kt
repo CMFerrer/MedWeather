@@ -9,4 +9,5 @@ sealed interface SearchUiState {
         val cities: NetworkSearch? = null
     ) : SearchUiState
 
+    data class Error(val message: String) : SearchUiState
 }

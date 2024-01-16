@@ -17,6 +17,8 @@ import com.chiksmedina.medweather.search.ui.SearchScreen
 import com.chiksmedina.medweather.search.ui.SearchUiState
 import com.chiksmedina.medweather.search.ui.SearchViewModel
 import com.chiksmedina.medweather.weather.ui.LoadingUI
+import com.chiksmedina.medweather.weather.ui.NoInternetConnection
+import com.chiksmedina.medweather.weather.ui.WeatherUiState
 
 fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
     this.navigate(Routes.Search.route, navOptions)
@@ -57,6 +59,7 @@ fun NavGraphBuilder.searchScreen(
 
         when (uiState) {
             SearchUiState.Loading -> LoadingUI()
+
             is SearchUiState.Success -> SearchScreen(
                 uiState = uiState as SearchUiState.Success,
                 scope = appState.coroutineScope,
@@ -68,6 +71,10 @@ fun NavGraphBuilder.searchScreen(
                 },
                 onBackPress = { appState.navController.popBackStack() }
             )
+
+            is SearchUiState.Error -> NoInternetConnection((uiState as SearchUiState.Error).message) {
+                searchViewModel.search("")
+            }
         }
 
     }

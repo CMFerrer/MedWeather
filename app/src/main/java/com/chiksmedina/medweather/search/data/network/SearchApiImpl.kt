@@ -3,10 +3,10 @@ package com.chiksmedina.medweather.search.data.network
 import android.util.Log
 import com.chiksmedina.medweather.core.util.HttpRoutes
 import com.chiksmedina.medweather.search.data.network.models.NetworkSearch
-import com.chiksmedina.medweather.weather.data.network.WeatherApiImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import java.net.UnknownHostException
 
 class SearchApiImpl(
     private val client: HttpClient
@@ -22,8 +22,10 @@ class SearchApiImpl(
                 }
             }.body()
             Result.success(response)
+        } catch (e: UnknownHostException) {
+            Result.failure(Exception("\uD83E\uDD21 No hay conexión a internet"))
         } catch(e: Exception) {
-            Log.d(WeatherApiImpl.TAG, "Error: general ${e.message}")
+            Log.d(TAG, "Error: general ${e.message}")
             Result.failure(Exception("Error al consultar la ciudad"))
         }
     }

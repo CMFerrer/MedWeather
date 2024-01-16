@@ -13,4 +13,5 @@ sealed interface WeatherUiState {
         val errorCreate: String = "", // error message
     ) : WeatherUiState
 
+    data class Error(val message: String) : WeatherUiState
 }
