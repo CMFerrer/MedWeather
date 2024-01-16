@@ -1,5 +1,7 @@
 package com.chiksmedina.medweather.weather.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,6 +27,28 @@ fun NavGraphBuilder.weatherScreen(
 ) {
     composable(
         route = Routes.Weather.route,
+        enterTransition = {
+            when(initialState.destination.route) {
+                Routes.Search.route -> {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(700)
+                    )
+                }
+                else -> null
+            }
+        },
+        exitTransition = {
+            when(targetState.destination.route) {
+                Routes.Search.route -> {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(700)
+                    )
+                }
+                else -> null
+            }
+        }
     ) { backStackEntry ->
 
         val weatherViewModel = hiltViewModel<WeatherViewModel>()

@@ -1,5 +1,7 @@
 package com.chiksmedina.medweather.search.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +28,28 @@ fun NavGraphBuilder.searchScreen(
 ) {
     composable(
         route = Routes.Search.route,
+        enterTransition = {
+            when(initialState.destination.route) {
+                Routes.Weather.route -> {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        tween(700)
+                    )
+                }
+                else -> null
+            }
+        },
+        exitTransition = {
+            when(targetState.destination.route) {
+                Routes.Weather.route -> {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        tween(700)
+                    )
+                }
+                else -> null
+            }
+        }
     ) { backStackEntry ->
 
         val searchViewModel = hiltViewModel<SearchViewModel>()
