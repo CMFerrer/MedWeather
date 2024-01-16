@@ -65,7 +65,11 @@ fun NavGraphBuilder.searchScreen(
                 uiState = uiState as SearchUiState.Success,
                 onBackPress = { appState.navController.popBackStack() },
                 search = searchViewModel::search
-            )
+            ) { cit, lat, lon ->
+                searchViewModel.saveCityAndLocation(cit, lat, lon) {
+                    appState.navigateToTopLevelDestination(Routes.Weather)
+                }
+            }
         }
 
     }

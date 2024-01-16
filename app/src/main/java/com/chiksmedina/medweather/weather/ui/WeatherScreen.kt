@@ -64,7 +64,7 @@ fun WeatherScreen(
     ) {
 
         uiState.forecast?.let {
-            City(city = "Lima", toSearch= toSearch)
+            City(city = uiState.city, toSearch= toSearch)
             WeatherHeader(
                 "${it.current.temperature2m} ${it.currentUnits.temperature2m}",
                 "${it.daily.temperature2mMax[0]} ${it.dailyUnits.temperature2mMax[0]}",

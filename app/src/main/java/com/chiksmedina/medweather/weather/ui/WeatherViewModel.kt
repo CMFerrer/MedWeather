@@ -2,11 +2,13 @@ package com.chiksmedina.medweather.weather.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.chiksmedina.medweather.weather.data.DataStoreRepository
 import com.chiksmedina.medweather.weather.data.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     private val repository: WeatherRepository,
+    private val data: DataStoreRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Loading)
@@ -21,15 +24,21 @@ class WeatherViewModel @Inject constructor(
 
     init {
         // Fetch weather data when the ViewModel is created
-        getWeather(lat = -12.0432, lon = -77.0282)
+        getWeather()
     }
 
-    fun getWeather(lat: Double, lon: Double) {
+    private fun getWeather() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getWeather(lat, lon)
-                .onSuccess { weather ->
-                    _uiState.update { WeatherUiState.Success(weather) }
+            _uiState.update { WeatherUiState.Loading }
+
+            combine(data.city, data.latitude, data.longitude, ::Triple)
+                .collect { (cit, lat, lon) ->
+                    repository.getWeather(lat, lon)
+                        .onSuccess { weather ->
+                            _uiState.update { WeatherUiState.Success(forecast = weather, city = cit) }
+                        }
                 }
+
         }
     }
 }

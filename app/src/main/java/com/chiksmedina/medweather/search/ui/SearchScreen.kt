@@ -1,5 +1,6 @@
 package com.chiksmedina.medweather.search.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,14 +55,16 @@ fun SearchWrapper(
 fun SearchScreen(
     uiState: SearchUiState.Success,
     onBackPress: () -> Unit,
-    search: (String) -> Unit
+    search: (String) -> Unit,
+    saveCityAndLocation: (String, Double, Double) -> Unit
 ) {
 
     SearchWrapper(onBackPress = onBackPress, search = search) {
-        uiState.cities?.let {
-            for (city in it.results) {
+        uiState.cities?.results?.let {
+            for (city in it) {
                 ListItem(
                     headlineContent = { Text(text = city.name) },
+                    modifier = Modifier.clickable { saveCityAndLocation(city.name, city.latitude, city.longitude) },
                     supportingContent = { Text(text = "${city.admin1} ${city.country}") },
                 )
             }

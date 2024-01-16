@@ -9,10 +9,8 @@ sealed interface WeatherUiState {
         val forecast: NetworkWeather? = null,
         val latitude: Double = -12.0432, // Lima default
         val longitude: Double = -77.0282,
-        val isErrorRecipient: Boolean = false,
-        val isErrorCreate: Boolean = false, // error on create recipient or bank account number
+        val city: String = "Lima",
         val errorCreate: String = "", // error message
-        val isReceptionEnabled: Boolean = false, // button to go ReceptionScreen
     ) : WeatherUiState
 
 }

@@ -3,6 +3,7 @@ package com.chiksmedina.medweather.search.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chiksmedina.medweather.search.data.SearchRepository
+import com.chiksmedina.medweather.weather.data.DataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val repository: SearchRepository,
+    private val data: DataStoreRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.New)
@@ -26,6 +28,14 @@ class SearchViewModel @Inject constructor(
                     onSuccess {  result ->
                         _uiState.update { SearchUiState.Success(result) }
                     }
+        }
+    }
+
+    fun saveCityAndLocation(city: String, latitude: Double, longitude: Double, toWeather: () -> Unit) {
+        viewModelScope.launch {
+            data.saveCity(city)
+            data.saveLocation(latitude, longitude)
+            toWeather()
         }
     }
 }
