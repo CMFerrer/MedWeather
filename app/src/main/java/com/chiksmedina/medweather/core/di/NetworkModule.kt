@@ -50,7 +50,7 @@ class NetworkModule {
                 url {
                     parameters.append("current", "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m")
                     parameters.append("hourly", "temperature_2m")
-                    parameters.append("daily", "temperature_2m_max,temperature_2m_min,sunrise,sunset")
+                    parameters.append("daily", "temperature_2m_max,temperature_2m_min,sunrise,sunset,weather_code")
                     parameters.append("timezone", "auto")
                     parameters.append("forecast_days", "6")
                 }
