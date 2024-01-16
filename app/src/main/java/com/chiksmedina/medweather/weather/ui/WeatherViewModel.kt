@@ -22,7 +22,6 @@ class WeatherViewModel @Inject constructor(
     init {
         // Fetch weather data when the ViewModel is created
         getWeather(lat = -12.0432, lon = -77.0282)
-        //viewModelScope.launch { repository.getWeather(lat = 40.7128, lon = -74.0060)
     }
 
     fun getWeather(lat: Double, lon: Double) {

@@ -1,6 +1,7 @@
 package com.chiksmedina.medweather.weather.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -62,7 +64,7 @@ fun WeatherScreen(
     ) {
 
         uiState.forecast?.let {
-            City(city = "Lima")
+            City(city = "Lima", toSearch= toSearch)
             WeatherHeader(
                 "${it.current.temperature2m} ${it.currentUnits.temperature2m}",
                 "${it.daily.temperature2mMax[0]} ${it.dailyUnits.temperature2mMax[0]}",
@@ -86,8 +88,8 @@ fun WeatherScreen(
 }
 
 @Composable
-fun City(city: String) {
-    TextButton(onClick = { /*TODO*/ }) {
+fun City(city: String, toSearch: () -> Unit) {
+    TextButton(onClick = { toSearch() }) {
         Text(text = city, modifier = Modifier.padding(horizontal = 18.dp), style = MaterialTheme.typography.titleLarge)
     }
 }
@@ -283,10 +285,21 @@ fun SunriseAndSunset(sunrise: String, sunset: String) {
     ) {
 
         Card(modifier = Modifier.weight(1f)) {
-            UsefulInformationCard(modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 8.dp), icon = OutlineSolar.Weather.Sunrise, text = sunrise, subText = "Amanecer")
+            UsefulInformationCard(modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(vertical = 8.dp), icon = OutlineSolar.Weather.Sunrise, text = sunrise, subText = "Amanecer")
         }
         Card(modifier = Modifier.weight(1f)) {
-            UsefulInformationCard(modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 8.dp), icon = OutlineSolar.Weather.Sunset, text = sunset, subText = "Atardecer")
+            UsefulInformationCard(modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(vertical = 8.dp), icon = OutlineSolar.Weather.Sunset, text = sunset, subText = "Atardecer")
         }
+    }
+}
+
+@Composable
+fun LoadingUI() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
     }
 }
