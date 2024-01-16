@@ -26,7 +26,6 @@ fun NavController.navigateToWeather(navOptions: NavOptions? = null) {
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.weatherScreen(
     appState: AppState,
-    paddingValues: PaddingValues
 ) {
     composable(
         route = Routes.Weather.route,
@@ -52,7 +51,7 @@ fun NavGraphBuilder.weatherScreen(
                 else -> null
             }
         }
-    ) { backStackEntry ->
+    ) {
 
         val weatherViewModel = hiltViewModel<WeatherViewModel>()
         val uiState by weatherViewModel.uiState.collectAsStateWithLifecycle()
@@ -61,7 +60,6 @@ fun NavGraphBuilder.weatherScreen(
             WeatherUiState.Loading -> LoadingUI()
 
             is WeatherUiState.Success -> WeatherScreen(
-                paddingValues = paddingValues,
                 uiState = uiState as WeatherUiState.Success,
                 pullRefreshState = appState.pullRefreshState,
                 toSearch = { appState.navigateToTopLevelDestination(Routes.Search) },

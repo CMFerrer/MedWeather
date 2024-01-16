@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -54,8 +55,7 @@ fun SearchScreen(
     onBackPress: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment =  Alignment.CenterHorizontally
     ) {
         SearchTopBar(onBackPress, search)
@@ -84,9 +84,7 @@ fun ButtonRequestLocationPermission(
     val locationClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
     }
-    var locationInfo by remember {
-        mutableStateOf("")
-    }
+
     val locationPermissionsState = rememberMultiplePermissionsState(
         listOf(
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -105,13 +103,6 @@ fun ButtonRequestLocationPermission(
                 if (locationPermissionsState.allPermissionsGranted) {
                     scope.launch(Dispatchers.IO) {
                         val result = locationClient.lastLocation.await()
-                        locationInfo = if (result == null) {
-                            "No last known location. Try fetching the current location first"
-                        } else {
-                            "Current location is \n" + "lat : ${result.latitude}\n" +
-                                    "long : ${result.longitude}\n" + "fetched at ${System.currentTimeMillis()}"
-                        }
-                        Log.d("Location", locationInfo)
                         if (result!= null) saveCityAndLocation("Ubicación Actual", result.latitude, result.longitude)
                     }
                 } else {

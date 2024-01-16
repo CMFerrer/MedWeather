@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
+// Data store for saving and retrieving data on device.
 class DataStoreRepository (
     private val context: Context
 ) {

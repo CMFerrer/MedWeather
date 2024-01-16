@@ -60,7 +60,6 @@ import java.time.LocalDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherScreen(
-    paddingValues: PaddingValues,
     uiState: WeatherUiState.Success,
     pullRefreshState: PullToRefreshState,
     toSearch: () -> Unit,
@@ -68,6 +67,7 @@ fun WeatherScreen(
 ) {
 
     if (pullRefreshState.isRefreshing) {
+        // update the weather when refreshing
         refresh()
     }
 
@@ -76,7 +76,6 @@ fun WeatherScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
                 .padding(24.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -237,17 +236,19 @@ fun NextFiveDays(dailyUnits: DailyUnits, daily: Daily) {
         ) {
 
             daily.time.forEachIndexed { index, time ->
-                val maxTemp = "${daily.temperature2mMax[index]}${dailyUnits.temperature2mMax}"
-                val minTemp = "${daily.temperature2mMin[index]}${dailyUnits.temperature2mMin}"
-                val icon = daily.weatherCode[index].iconByWeatherCode()
-                NextFiveDaysCard(time.getDayOfWeek(), maxTemp, minTemp, icon)
+                NextFiveDaysCard(
+                    dayOfWeek = time.getDayOfWeek(),
+                    maximumTemperature = "${daily.temperature2mMax[index]}${dailyUnits.temperature2mMax}",
+                    minimumTemperature = "${daily.temperature2mMin[index]}${dailyUnits.temperature2mMin}",
+                    icon = daily.weatherCode[index].iconByWeatherCode()
+                )
             }
         }
     }
 }
 
 @Composable
-fun NextFiveDaysCard(dayOfWeek: String, maxTemp: String, minTemp: String, icon: ImageVector) {
+fun NextFiveDaysCard(dayOfWeek: String, maximumTemperature: String, minimumTemperature: String, icon: ImageVector) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -261,9 +262,9 @@ fun NextFiveDaysCard(dayOfWeek: String, maxTemp: String, minTemp: String, icon: 
             tint = MaterialTheme.colorScheme.primary
         )
         Row {
-            Text(text = maxTemp, style = MaterialTheme.typography.titleSmall)
+            Text(text = maximumTemperature, style = MaterialTheme.typography.titleSmall)
             Text(text = " / ")
-            Text(text = minTemp, style = MaterialTheme.typography.titleSmall)
+            Text(text = minimumTemperature, style = MaterialTheme.typography.titleSmall)
         }
     }
 }

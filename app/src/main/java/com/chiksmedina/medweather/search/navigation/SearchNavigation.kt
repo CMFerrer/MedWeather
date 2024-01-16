@@ -23,8 +23,7 @@ fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.searchScreen(
-    appState: AppState,
-    paddingValues: PaddingValues
+    appState: AppState
 ) {
     composable(
         route = Routes.Search.route,
@@ -50,7 +49,7 @@ fun NavGraphBuilder.searchScreen(
                 else -> null
             }
         }
-    ) { backStackEntry ->
+    ) {
 
         val searchViewModel = hiltViewModel<SearchViewModel>()
         val uiState by searchViewModel.uiState.collectAsStateWithLifecycle()
