@@ -1,8 +1,7 @@
 package com.chiksmedina.medweather.weather.data.network.models
+
 import kotlinx.serialization.Serializable
-
 import kotlinx.serialization.SerialName
-
 
 @Serializable
 data class NetworkWeather(
@@ -15,7 +14,7 @@ data class NetworkWeather(
     @SerialName("daily_units")
     val dailyUnits: DailyUnits,
     @SerialName("elevation")
-    val elevation: Int,
+    val elevation: Double,
     @SerialName("generationtime_ms")
     val generationTimeMs: Double,
     @SerialName("hourly")
@@ -36,14 +35,20 @@ data class NetworkWeather(
 
 @Serializable
 data class Current(
+    @SerialName("apparent_temperature")
+    val apparentTemperature: Double,
+    @SerialName("cloud_cover")
+    val cloudCover: Int,
     @SerialName("interval")
     val interval: Int,
     @SerialName("precipitation")
-    val precipitation: Int,
+    val precipitation: Double,
     @SerialName("rain")
-    val rain: Int,
+    val rain: Double,
+    @SerialName("relative_humidity_2m")
+    val relativeHumidity2m: Int,
     @SerialName("showers")
-    val showers: Int,
+    val showers: Double,
     @SerialName("temperature_2m")
     val temperature2m: Double,
     @SerialName("time")
@@ -51,17 +56,25 @@ data class Current(
     @SerialName("weather_code")
     val weatherCode: Int,
     @SerialName("wind_speed_10m")
-    val windSpeed10m: Double
+    val windSpeed10m: Double,
+    @SerialName("wind_direction_10m")
+    val windDirection10m: Int
 )
 
 @Serializable
 data class CurrentUnits(
+    @SerialName("apparent_temperature")
+    val apparentTemperature: String,
+    @SerialName("cloud_cover")
+    val cloudCover: String,
     @SerialName("interval")
     val interval: String,
     @SerialName("precipitation")
     val precipitation: String,
     @SerialName("rain")
     val rain: String,
+    @SerialName("relative_humidity_2m")
+    val relativeHumidity2m: String,
     @SerialName("showers")
     val showers: String,
     @SerialName("temperature_2m")
@@ -71,7 +84,9 @@ data class CurrentUnits(
     @SerialName("weather_code")
     val weatherCode: String,
     @SerialName("wind_speed_10m")
-    val windSpeed10m: String
+    val windSpeed10m: String,
+    @SerialName("wind_direction_10m")
+    val windDirection10m: String
 )
 
 @Serializable

@@ -46,12 +46,12 @@ class NetworkModule {
                 url(HttpRoutes.BASE_URL)
                 contentType(ContentType.Application.Json)
                 accept(ContentType.Application.Json)
-                parameters {
-                    append("current", "temperature_2m,precipitation,rain,showers,weather_code,wind_speed_10m")
-                    append("hourly", "temperature_2m")
-                    append("daily", "temperature_2m_max,temperature_2m_min,sunrise,sunset")
-                    append("timezone", "auto")
-                    append("forecast_days", "6")
+                url {
+                    parameters.append("current", "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m")
+                    parameters.append("hourly", "temperature_2m")
+                    parameters.append("daily", "temperature_2m_max,temperature_2m_min,sunrise,sunset")
+                    parameters.append("timezone", "auto")
+                    parameters.append("forecast_days", "6")
                 }
             }
         }

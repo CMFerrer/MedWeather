@@ -42,8 +42,9 @@ fun NavGraphBuilder.weatherScreen(
             }
             is WeatherUiState.Success -> {
                 WeatherScreen(
+                    paddingValues = paddingValues,
                     uiState = uiState as WeatherUiState.Success,
-                    paddingValues = paddingValues
+                    toSearch = { appState.navigateToTopLevelDestination(Routes.Search) }
                 )
             }
         }
