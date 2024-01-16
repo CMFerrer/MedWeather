@@ -57,19 +57,25 @@ fun NavGraphBuilder.searchScreen(
 
         when (uiState) {
             SearchUiState.New -> NewSearch(
-                onBackPress = { appState.navController.popBackStack() },
-                search = searchViewModel::search
+                search = searchViewModel::search,
+                saveCityAndLocation = { cit, lat, lon ->
+                    searchViewModel.saveCityAndLocation(cit, lat, lon) {
+                        appState.navigateToTopLevelDestination(Routes.Weather)
+                    }
+                },
+                onBackPress = { appState.navController.popBackStack() }
             )
             SearchUiState.Loading -> LoadingUI()
             is SearchUiState.Success -> SearchScreen(
                 uiState = uiState as SearchUiState.Success,
-                onBackPress = { appState.navController.popBackStack() },
-                search = searchViewModel::search
-            ) { cit, lat, lon ->
-                searchViewModel.saveCityAndLocation(cit, lat, lon) {
-                    appState.navigateToTopLevelDestination(Routes.Weather)
-                }
-            }
+                search = searchViewModel::search,
+                saveCityAndLocation = { cit, lat, lon ->
+                    searchViewModel.saveCityAndLocation(cit, lat, lon) {
+                        appState.navigateToTopLevelDestination(Routes.Weather)
+                    }
+                },
+                onBackPress = { appState.navController.popBackStack() }
+            )
         }
 
     }
