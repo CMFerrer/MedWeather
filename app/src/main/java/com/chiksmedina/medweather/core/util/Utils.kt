@@ -1,5 +1,18 @@
 package com.chiksmedina.medweather.core.util
 
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.chiksmedina.solar.BoldDuotoneSolar
+import com.chiksmedina.solar.boldduotone.Weather
+import com.chiksmedina.solar.boldduotone.weather.CloudRain
+import com.chiksmedina.solar.boldduotone.weather.CloudSnowfall
+import com.chiksmedina.solar.boldduotone.weather.CloudSnowfallMinimalistic
+import com.chiksmedina.solar.boldduotone.weather.CloudSun2
+import com.chiksmedina.solar.boldduotone.weather.CloudWaterdrop
+import com.chiksmedina.solar.boldduotone.weather.CloudWaterdrops
+import com.chiksmedina.solar.boldduotone.weather.Clouds
+import com.chiksmedina.solar.boldduotone.weather.Fog
+import com.chiksmedina.solar.boldduotone.weather.Sun
+import com.chiksmedina.solar.boldduotone.weather.Sun2
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.Month
@@ -33,6 +46,20 @@ fun Int.weatherInterpretationCode(): String = when (this) {
     85 -> "Chubascos de nieve ligeros"
     86 -> "Chubascos de nieve intensos"
     else -> ""
+}
+
+fun Int.iconByWeatherCode(): ImageVector = when (this) {
+    0, 1 -> BoldDuotoneSolar.Weather.Sun2
+    2 -> BoldDuotoneSolar.Weather.CloudSun2
+    3 -> BoldDuotoneSolar.Weather.Clouds
+    45, 48 -> BoldDuotoneSolar.Weather.Fog
+    51, 53, 56 -> BoldDuotoneSolar.Weather.CloudWaterdrop
+    55, 57 -> BoldDuotoneSolar.Weather.CloudWaterdrops
+    61, 63, 65, 66, 67 -> BoldDuotoneSolar.Weather.CloudRain
+    71, 73 -> BoldDuotoneSolar.Weather.CloudSnowfall
+    75, 77 -> BoldDuotoneSolar.Weather.CloudSnowfallMinimalistic
+    80, 81, 82, 85, 86 -> BoldDuotoneSolar.Weather.CloudRain
+    else -> BoldDuotoneSolar.Weather.Sun
 }
 
 fun String.getHour() = this.split("T")[1]

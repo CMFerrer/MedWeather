@@ -102,7 +102,7 @@ data class Daily(
     @SerialName("time")
     val time: List<String>,
     @SerialName("weather_code")
-    val weatherCode: List<Int>,
+    val weatherCode: List<Int>
 )
 
 @Serializable
@@ -126,7 +126,9 @@ data class Hourly(
     @SerialName("temperature_2m")
     val temperature2m: List<Double>,
     @SerialName("time")
-    val time: List<String>
+    val time: List<String>,
+    @SerialName("weather_code")
+    val weatherCode: List<Int>
 )
 
 @Serializable
@@ -134,5 +136,7 @@ data class HourlyUnits(
     @SerialName("temperature_2m")
     val temperature2m: String,
     @SerialName("time")
-    val time: String
+    val time: String,
+    @SerialName("weather_code")
+    val weatherCode: String
 )

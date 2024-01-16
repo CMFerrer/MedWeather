@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.chiksmedina.medweather.core.util.getDayOfWeek
 import com.chiksmedina.medweather.core.util.getHour
+import com.chiksmedina.medweather.core.util.iconByWeatherCode
 import com.chiksmedina.medweather.core.util.weatherInterpretationCode
 import com.chiksmedina.medweather.core.util.windDirectionDegreeToText
 import com.chiksmedina.medweather.weather.data.network.models.Current
@@ -136,6 +138,7 @@ fun HourlyWeather(hourlyUnits: HourlyUnits, hourly: Hourly) {
     // New list with the next 24 hours, starting from the current hour
     val timeList = hourly.time.subList(hourly.time.indexOf(currentHour), hourly.time.indexOf(currentHour)+ 25)
     val temperatureList = hourly.temperature2m.subList(hourly.time.indexOf(currentHour), hourly.time.indexOf(currentHour)+ 25)
+    val iconList = hourly.weatherCode.subList(hourly.time.indexOf(currentHour), hourly.time.indexOf(currentHour)+ 25)
 
     Card {
         Text(text = "Por horas", modifier = Modifier.padding(start = 4.dp, top = 8.dp), style = MaterialTheme.typography.labelMedium)
@@ -144,7 +147,11 @@ fun HourlyWeather(hourlyUnits: HourlyUnits, hourly: Hourly) {
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(timeList.size) {
-                HourlyWeatherCard(hour = timeList[it].getHour(), temperature = "${temperatureList[0]}${hourlyUnits.temperature2m}")
+                HourlyWeatherCard(
+                    hour = timeList[it].getHour(),
+                    temperature = "${temperatureList[it]}${hourlyUnits.temperature2m}",
+                    icon = iconList[it].iconByWeatherCode()
+                )
             }
         }
     }
@@ -152,18 +159,20 @@ fun HourlyWeather(hourlyUnits: HourlyUnits, hourly: Hourly) {
 }
 
 @Composable
-fun HourlyWeatherCard(hour: String, temperature: String) {
+fun HourlyWeatherCard(hour: String, temperature: String, icon: ImageVector) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(text = hour, style = MaterialTheme.typography.labelMedium)
-        Text(text = temperature, fontWeight = FontWeight.Medium)
+        Icon(imageVector = icon, contentDescription = "weather icon", tint = MaterialTheme.colorScheme.primary)
+        Text(text = temperature, fontWeight = FontWeight.SemiBold)
     }
 }
 
 @Composable
 fun NextFiveDays(dailyUnits: DailyUnits, daily: Daily) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    ElevatedCard(modifier = Modifier.fillMaxWidth()) {
         Text(text = "Próximos 5 dias", modifier = Modifier.padding(start = 4.dp, top = 8.dp), style = MaterialTheme.typography.labelMedium)
 
         Column(
@@ -173,15 +182,15 @@ fun NextFiveDays(dailyUnits: DailyUnits, daily: Daily) {
             daily.time.forEachIndexed { index, time ->
                 val maxTemp = "${daily.temperature2mMax[index]}${dailyUnits.temperature2mMax}"
                 val minTemp = "${daily.temperature2mMin[index]}${dailyUnits.temperature2mMin}"
-
-                NextFiveDaysCard(time.getDayOfWeek(), maxTemp, minTemp)
+                val icon = daily.weatherCode[index].iconByWeatherCode()
+                NextFiveDaysCard(time.getDayOfWeek(), maxTemp, minTemp, icon)
             }
         }
     }
 }
 
 @Composable
-fun NextFiveDaysCard(dayOfWeek: String, maxTemp: String, minTemp: String) {
+fun NextFiveDaysCard(dayOfWeek: String, maxTemp: String, minTemp: String, icon: ImageVector) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -189,6 +198,7 @@ fun NextFiveDaysCard(dayOfWeek: String, maxTemp: String, minTemp: String) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = dayOfWeek, style = MaterialTheme.typography.titleMedium)
+        Icon(imageVector = icon, contentDescription = "weather icon", tint = MaterialTheme.colorScheme.primary)
         Row {
             Text(text = maxTemp, style = MaterialTheme.typography.titleSmall)
             Text(text = " / ")
@@ -284,12 +294,12 @@ fun SunriseAndSunset(sunrise: String, sunset: String) {
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
-        Card(modifier = Modifier.weight(1f)) {
+        ElevatedCard(modifier = Modifier.weight(1f)) {
             UsefulInformationCard(modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(vertical = 8.dp), icon = OutlineSolar.Weather.Sunrise, text = sunrise, subText = "Amanecer")
         }
-        Card(modifier = Modifier.weight(1f)) {
+        ElevatedCard(modifier = Modifier.weight(1f)) {
             UsefulInformationCard(modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(vertical = 8.dp), icon = OutlineSolar.Weather.Sunset, text = sunset, subText = "Atardecer")
