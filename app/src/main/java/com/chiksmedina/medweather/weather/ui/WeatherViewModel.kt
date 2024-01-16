@@ -1,6 +1,5 @@
 package com.chiksmedina.medweather.weather.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chiksmedina.medweather.weather.data.DataStoreRepository
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.net.UnknownHostException
 import javax.inject.Inject
 
 @HiltViewModel

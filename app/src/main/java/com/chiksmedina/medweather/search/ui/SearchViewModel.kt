@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chiksmedina.medweather.search.data.SearchRepository
 import com.chiksmedina.medweather.weather.data.DataStoreRepository
-import com.chiksmedina.medweather.weather.ui.WeatherUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

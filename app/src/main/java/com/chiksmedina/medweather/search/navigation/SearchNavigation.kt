@@ -12,13 +12,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.chiksmedina.medweather.AppState
 import com.chiksmedina.medweather.navigation.Routes
-import com.chiksmedina.medweather.search.ui.ButtonRequestLocationPermission
 import com.chiksmedina.medweather.search.ui.SearchScreen
 import com.chiksmedina.medweather.search.ui.SearchUiState
 import com.chiksmedina.medweather.search.ui.SearchViewModel
 import com.chiksmedina.medweather.weather.ui.LoadingUI
 import com.chiksmedina.medweather.weather.ui.NoInternetConnection
-import com.chiksmedina.medweather.weather.ui.WeatherUiState
 
 fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
     this.navigate(Routes.Search.route, navOptions)
