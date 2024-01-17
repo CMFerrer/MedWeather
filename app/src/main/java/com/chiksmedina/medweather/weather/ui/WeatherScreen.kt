@@ -41,6 +41,7 @@ import com.chiksmedina.medweather.core.util.getHour
 import com.chiksmedina.medweather.core.util.iconByWeatherCode
 import com.chiksmedina.medweather.core.util.weatherInterpretationCode
 import com.chiksmedina.medweather.core.util.windDirectionDegreeToText
+import com.chiksmedina.medweather.ui.charts.LineChartHourlyWeatherM3
 import com.chiksmedina.medweather.weather.data.network.models.Current
 import com.chiksmedina.medweather.weather.data.network.models.CurrentUnits
 import com.chiksmedina.medweather.weather.data.network.models.Daily
@@ -57,6 +58,7 @@ import com.chiksmedina.solar.outline.weather.Sunset
 import com.chiksmedina.solar.outline.weather.Temperature
 import com.chiksmedina.solar.outline.weather.Waterdrops
 import com.chiksmedina.solar.outline.weather.Wind
+import com.patrykandpatrick.vico.core.entry.entryModelOf
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +75,11 @@ fun WeatherScreen(
         refresh()
     }
 
-    Box(Modifier.background(Brush.linearGradient(listOf(Color(0xFF3e61db), Color(0xFF649fe8)))).nestedScroll(pullRefreshState.nestedScrollConnection)) {
+    Box(
+        Modifier
+            .background(Brush.linearGradient(listOf(Color(0xFF3e61db), Color(0xFF649fe8))))
+            .nestedScroll(pullRefreshState.nestedScrollConnection)
+    ) {
 
         Column(
             modifier = Modifier
@@ -90,7 +96,7 @@ fun WeatherScreen(
                     actualTemperature = "${it.current.temperature2m} ${it.currentUnits.temperature2m}",
                     maxTemperature = "${it.daily.temperature2mMax[0]} ${it.dailyUnits.temperature2mMax[0]}",
                     minTemperature = "${it.daily.temperature2mMin[0]} ${it.dailyUnits.temperature2mMin[0]}",
-                    weatherInterpretation =  it.current.weatherCode.weatherInterpretationCode(),
+                    weatherInterpretation = it.current.weatherCode.weatherInterpretationCode(),
                     lastUpdate = it.current.time.replace("T", " ")
                 )
 
@@ -102,7 +108,10 @@ fun WeatherScreen(
 
                 UsefulInformation(it.currentUnits, it.current)
 
-                SunriseAndSunset(it.daily.sunrise[0].split("T")[1], it.daily.sunset[0].split("T")[1])
+                SunriseAndSunset(
+                    it.daily.sunrise[0].split("T")[1],
+                    it.daily.sunset[0].split("T")[1]
+                )
 
             }
 
@@ -164,7 +173,12 @@ fun WeatherHeader(
 @Composable
 fun LastUpdate(lastUpdate: String) {
     Column {
-        Text(text = "Ultima actualización", fontStyle = FontStyle.Italic, color = Color.LightGray, style = MaterialTheme.typography.labelSmall)
+        Text(
+            text = "Ultima actualización",
+            fontStyle = FontStyle.Italic,
+            color = Color.LightGray,
+            style = MaterialTheme.typography.labelSmall
+        )
         Text(text = lastUpdate, color = Color.White, style = MaterialTheme.typography.labelMedium)
     }
 }
@@ -195,7 +209,7 @@ fun HourlyWeather(hourlyUnits: HourlyUnits, hourly: Hourly) {
         )
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             items(timeList.size) {
                 HourlyWeatherCard(
@@ -205,6 +219,12 @@ fun HourlyWeather(hourlyUnits: HourlyUnits, hourly: Hourly) {
                 )
             }
         }
+
+        LineChartHourlyWeatherM3(
+            entryModelOf(*temperatureList.toTypedArray()),
+            timeList.map { it.getHour() }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
     }
 
 }
@@ -251,7 +271,12 @@ fun NextFiveDays(dailyUnits: DailyUnits, daily: Daily) {
 }
 
 @Composable
-fun NextFiveDaysCard(dayOfWeek: String, maximumTemperature: String, minimumTemperature: String, icon: ImageVector) {
+fun NextFiveDaysCard(
+    dayOfWeek: String,
+    maximumTemperature: String,
+    minimumTemperature: String,
+    icon: ImageVector
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

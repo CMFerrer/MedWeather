@@ -100,6 +100,10 @@ dependencies {
     // Permissions
     implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
 
+    // Vico
+    implementation("com.patrykandpatrick.vico:compose:1.13.1")
+    implementation("com.patrykandpatrick.vico:compose-m3:1.13.1")
+
     // Location
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
