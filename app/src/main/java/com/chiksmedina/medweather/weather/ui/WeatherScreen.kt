@@ -1,5 +1,6 @@
 package com.chiksmedina.medweather.weather.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -60,6 +61,7 @@ import com.chiksmedina.solar.outline.weather.Waterdrops
 import com.chiksmedina.solar.outline.weather.Wind
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,7 +104,7 @@ fun WeatherScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                HourlyWeather(it.hourlyUnits, it.hourly)
+                HourlyWeather(it.hourlyUnits, it.hourly, it.timezone)
 
                 NextFiveDays(it.dailyUnits, it.daily)
 
@@ -184,9 +186,9 @@ fun LastUpdate(lastUpdate: String) {
 }
 
 @Composable
-fun HourlyWeather(hourlyUnits: HourlyUnits, hourly: Hourly) {
+fun HourlyWeather(hourlyUnits: HourlyUnits, hourly: Hourly, timezone: String) {
 
-    val dateTime = LocalDateTime.now()
+    val dateTime = LocalDateTime.now(ZoneId.of(timezone))
     val currentHour = hourly.time.find { it.startsWith(dateTime.toString().substring(0, 13)) }
 
     // New list with the next 24 hours, starting from the current hour
