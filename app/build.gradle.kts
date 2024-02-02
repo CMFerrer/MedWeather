@@ -51,11 +51,11 @@ android {
 
 dependencies {
 
-    val composeVersion = "1.6.0-rc01"
+    val composeVersion = "1.6.0"
     val hiltVersion = "2.50"
     val ktorVersion = "2.3.7"
     val lifecycleVersion = "2.7.0"
-    val material3Version = "1.2.0-beta02"
+    val material3Version = "1.2.0-rc01"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -98,14 +98,14 @@ dependencies {
     implementation("dev.chiksmedina.solar:solar:1.0.1")
 
     // Permissions
-    implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
+    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 
     // Vico
     implementation("com.patrykandpatrick.vico:compose:1.13.1")
     implementation("com.patrykandpatrick.vico:compose-m3:1.13.1")
 
     // Location
-    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-location:21.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
